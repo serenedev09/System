@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - MyEstia Personal Task & Reminder System</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/fontawesome/all.min.css') }}">
+
+  <style>
+    body,
+    h1, h2, h3, h4, h5, h6,
+    button, input, select, textarea {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Outfit', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+  </style>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+  <div class="auth-page-container">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 28px; height: 28px;">
+            <defs>
+              <linearGradient id="authBrandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#6366f1"/>
+                <stop offset="50%" stop-color="#8b5cf6"/>
+                <stop offset="100%" stop-color="#06b6d4"/>
+              </linearGradient>
+            </defs>
+            <circle cx="24" cy="27" r="15" stroke="url(#authBrandGrad)" stroke-width="2.5" fill="none"/>
+            <line x1="24" y1="27" x2="24" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="24" y1="27" x2="30" y2="27" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="24" cy="27" r="2" fill="currentColor"/>
+            <rect x="21" y="4" width="6" height="4" rx="2" fill="url(#authBrandGrad)"/>
+            <rect x="22.5" y="8" width="3" height="4" fill="url(#authBrandGrad)"/>
+          </svg>
+        </div>
+        <h2>MyEstia</h2>
+        <p>Sign in to your personal task & reminder workspace</p>
+      </div>
+
+      <!-- Demo 1-Click Login Button -->
+      <button type="button" class="demo-login-btn" id="btn-demo-login">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 12L10 17L20 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+          <path d="M3 5L6 8M21 5L18 8M12 3V6M3 19L6 16M21 19L18 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <span>Try Demo Account (1-Click Login)</span>
+      </button>
+
+      <div class="auth-divider">
+        <span>or sign in with credentials</span>
+      </div>
+
+      <form id="login-form">
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label class="form-label" for="login-username">Username or Email</label>
+          <input type="text" id="login-username" class="form-input" placeholder="demo or alex@myestia.app" required autofocus>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <label class="form-label" for="login-password" style="margin-bottom: 0;">Password</label>
+            <span style="font-size: 0.75rem; color: var(--text-subtle);">Default: password123</span>
+          </div>
+          <div style="position: relative;">
+            <input type="password" id="login-password" class="form-input" placeholder="••••••••" required>
+            <button type="button" id="toggle-password"
+              style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-subtle); cursor: pointer;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg" id="eye-icon">
+                <path d="M2 12C2 12 5 5 12 5C19 5 22 12 22 12C22 12 19 19 12 19C5 19 2 12 2 12Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary auth-btn-block" id="btn-submit-login">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg> Sign In
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        Don't have an account? <a href="{{ url_for('register_page') }}" style="font-weight: 600;">Create one now</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+  <script>
+    const form = document.getElementById('login-form');
+    const demoBtn = document.getElementById('btn-demo-login');
+    const pwdToggle = document.getElementById('toggle-password');
+    const pwdInput = document.getElementById('login-password');
+    const eyeIcon = document.getElementById('eye-icon');
+
+    const eyeOpenSVG = '<path d="M2 12C2 12 5 5 12 5C19 5 22 12 22 12C22 12 19 19 12 19C5 19 2 12 2 12Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/>';
+    const eyeClosedSVG = '<path d="M3 3L21 21M10.6 6.1C11.1 6 11.5 6 12 6C19 6 22 12 22 12C21.4 13.2 20.3 14.7 18.6 15.9M6.6 6.6C3.7 8.3 2 12 2 12C2 12 5 19 12 19C13.7 19 15.2 18.5 16.4 17.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>';
+
+    pwdToggle.addEventListener('click', () => {
+      const isPwd = pwdInput.type === 'password';
+      pwdInput.type = isPwd ? 'text' : 'password';
+      eyeIcon.innerHTML = isPwd ? eyeClosedSVG : eyeOpenSVG;
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username_or_email = document.getElementById('login-username').value.trim();
+      const password = pwdInput.value;
+      const submitBtn = document.getElementById('btn-submit-login');
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = 'Signing In...';
+
+      try {
+        const res = await API.auth.login(username_or_email, password);
+        if (res.success) {
+          API.showToast(res.message || 'Login successful!', 'success');
+          setTimeout(() => {
+            window.location.href = "{{ url_for('index_page') }}";
+          }, 400);
+        } else {
+          API.showToast(res.message || 'Invalid credentials', 'error');
+        }
+      } catch (err) {
+        API.showToast(err.message || 'An error occurred during login', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle; margin-right: 0.4rem;"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Sign In';
+      }
+    });
+
+    demoBtn.addEventListener('click', async () => {
+      demoBtn.disabled = true;
+      demoBtn.innerHTML = 'Initializing Demo Session...';
+
+      try {
+        const res = await API.auth.demoLogin();
+        if (res.success) {
+          API.showToast('Logged in as Demo User!', 'success');
+          setTimeout(() => {
+            window.location.href = "{{ url_for('index_page') }}";
+          }, 400);
+        } else {
+          API.showToast(res.message || 'Could not start demo session', 'error');
+        }
+      } catch (err) {
+        API.showToast(err.message || 'Demo login failed', 'error');
+      } finally {
+        demoBtn.disabled = false;
+        demoBtn.innerHTML = '<span>Try Demo Account (1-Click Login)</span>';
+      }
+    });
+  </script>
+</body>
+
+</html>

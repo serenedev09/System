@@ -1,0 +1,591 @@
+{% extends "base.html" %}
+
+{% block title %}MyEstia - Productivity Dashboard & Task Manager{% endblock %}
+
+{% block content %}
+<!-- =========================================================
+     1. DASHBOARD VIEW
+     ========================================================= -->
+<div class="view-container active" id="view-dashboard">
+  <div class="view-header">
+    <div class="view-header-title">
+      <h1 id="dash-greeting">Welcome to MyEstia</h1>
+      <p id="dash-date-text">Track your tasks, focus on priorities, and never miss a reminder.</p>
+    </div>
+    <div>
+      <button class="btn-primary" id="dash-btn-new-task">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        </svg> New Task
+      </button>
+    </div>
+  </div>
+
+  <!-- KPI Metric Cards Grid -->
+  <div class="kpi-grid">
+    <div class="kpi-card info">
+      <div class="kpi-info">
+        <h3>Total Tasks</h3>
+        <div class="kpi-value" id="kpi-total">0</div>
+      </div>
+      <div class="kpi-icon-box">
+        <svg class="kpi-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="kpiGrad1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#22d3ee"/>
+              <stop offset="100%" stop-color="#0891b2"/>
+            </linearGradient>
+          </defs>
+          <path d="M12 2.5L21.5 7.5L12 12.5L2.5 7.5L12 2.5Z" stroke="url(#kpiGrad1)" stroke-width="1.9" stroke-linejoin="round"/>
+          <path d="M2.5 12L12 17L21.5 12" stroke="url(#kpiGrad1)" stroke-width="1.9" stroke-linejoin="round"/>
+          <path d="M2.5 16.5L12 21.5L21.5 16.5" stroke="url(#kpiGrad1)" stroke-width="1.9" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="kpi-card success">
+      <div class="kpi-info">
+        <h3>Completed</h3>
+        <div class="kpi-value" id="kpi-completed">0</div>
+      </div>
+      <div class="kpi-icon-box">
+        <svg class="kpi-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="kpiGrad2" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#34d399"/>
+              <stop offset="100%" stop-color="#059669"/>
+            </linearGradient>
+          </defs>
+          <circle cx="12" cy="12" r="9.5" stroke="url(#kpiGrad2)" stroke-width="1.9"/>
+          <path d="M7.5 12.5L10.5 15.5L16.5 9" stroke="url(#kpiGrad2)" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="kpi-card warning">
+      <div class="kpi-info">
+        <h3>Pending Tasks</h3>
+        <div class="kpi-value" id="kpi-pending">0</div>
+      </div>
+      <div class="kpi-icon-box">
+        <svg class="kpi-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="kpiGrad3" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#fbbf24"/>
+              <stop offset="100%" stop-color="#d97706"/>
+            </linearGradient>
+          </defs>
+          <circle cx="12" cy="12" r="9.5" stroke="url(#kpiGrad3)" stroke-width="1.9"/>
+          <path d="M12 6.5V12.3L15.8 14.5" stroke="url(#kpiGrad3)" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-info">
+        <h3>Due Today</h3>
+        <div class="kpi-value" id="kpi-due-today">0</div>
+      </div>
+      <div class="kpi-icon-box">
+        <svg class="kpi-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="kpiGrad4" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#a5b4fc"/>
+              <stop offset="100%" stop-color="#6366f1"/>
+            </linearGradient>
+          </defs>
+          <rect x="3.5" y="5" width="17" height="15.5" rx="2.5" stroke="url(#kpiGrad4)" stroke-width="1.9"/>
+          <path d="M3.5 10H20.5" stroke="url(#kpiGrad4)" stroke-width="1.9"/>
+          <path d="M8 3.5V6.5M16 3.5V6.5" stroke="url(#kpiGrad4)" stroke-width="1.9" stroke-linecap="round"/>
+          <circle cx="12" cy="15" r="1.6" fill="url(#kpiGrad4)"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="kpi-card urgent">
+      <div class="kpi-info">
+        <h3>Overdue</h3>
+        <div class="kpi-value" id="kpi-overdue">0</div>
+      </div>
+      <div class="kpi-icon-box">
+        <svg class="kpi-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="kpiGrad5" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#f87171"/>
+              <stop offset="100%" stop-color="#dc2626"/>
+            </linearGradient>
+          </defs>
+          <path d="M12 2.5L22.5 20.5H1.5L12 2.5Z" stroke="url(#kpiGrad5)" stroke-width="1.9" stroke-linejoin="round"/>
+          <path d="M12 9.5V14.5" stroke="url(#kpiGrad5)" stroke-width="2.1" stroke-linecap="round"/>
+          <circle cx="12" cy="17.5" r="1.2" fill="url(#kpiGrad5)"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="kpi-card success">
+      <div class="kpi-info">
+        <h3>Completion Rate</h3>
+        <div class="kpi-value" id="kpi-rate">0%</div>
+      </div>
+      <div class="kpi-icon-box">
+        <svg class="kpi-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="kpiGrad6" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#34d399"/>
+              <stop offset="100%" stop-color="#6366f1"/>
+            </linearGradient>
+          </defs>
+          <circle cx="12" cy="12" r="9.5" stroke="url(#kpiGrad6)" stroke-width="1.9" opacity="0.35"/>
+          <path d="M12 2.5A9.5 9.5 0 0 1 21.5 12" stroke="url(#kpiGrad6)" stroke-width="2.4" stroke-linecap="round"/>
+          <path d="M12 2.5A9.5 9.5 0 0 0 2.5 12" stroke="url(#kpiGrad6)" stroke-width="2.4" stroke-linecap="round" opacity="0.6"/>
+          <text x="12" y="14.5" text-anchor="middle" font-size="6.5" font-weight="800" fill="url(#kpiGrad6)" font-family="Outfit, sans-serif">%</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard Main Grid -->
+  <div class="dashboard-grid">
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+      <div class="dash-card">
+        <div class="dash-card-header">
+          <div class="dash-card-title">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: var(--priority-high);">
+              <path d="M12 2C12 2 9 6 9 10C9 12 10 13 10 13C10 13 8 12 8 10C8 10 6 14 8 17C9 18.5 10.5 19 12 19C13.5 19 15 18.5 16 17C18 14 16 10 16 10C16 10 14 12 14 13C14 13 15 12 15 10C15 6 12 2 12 2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              <path d="M12 19V22M10 22H14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+            <span>Today's Focus & Urgent Priorities</span>
+          </div>
+          <button class="btn-secondary" id="dash-btn-view-all-tasks" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">
+            View All
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="tasks-list" id="dash-focus-list">
+          <!-- Populated by dashboard.js -->
+        </div>
+      </div>
+
+      <div class="dash-card">
+        <div class="dash-card-header">
+          <div class="dash-card-title">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: var(--primary-400);">
+              <path d="M3 20H21" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+              <rect x="4.5" y="12" width="3" height="6" rx="1" stroke="currentColor" stroke-width="1.9"/>
+              <rect x="10.5" y="7" width="3" height="11" rx="1" stroke="currentColor" stroke-width="1.9"/>
+              <rect x="16.5" y="3.5" width="3" height="14.5" rx="1" stroke="currentColor" stroke-width="1.9"/>
+            </svg>
+            <span>7-Day Productivity Velocity</span>
+          </div>
+          <span style="font-size: 0.8rem; color: var(--text-subtle);">Tasks Completed vs Created</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chart-weekly-activity"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+      <div class="dash-card">
+        <div class="dash-card-header">
+          <div class="dash-card-title">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: var(--priority-high);">
+              <path d="M5 21V4M5 4H16L14 8L16 12H5" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"/>
+            </svg>
+            <span>Priority Distribution</span>
+          </div>
+        </div>
+        <div class="chart-wrapper" style="height: 220px;">
+          <canvas id="chart-priority-dist"></canvas>
+        </div>
+      </div>
+
+      <div class="dash-card">
+        <div class="dash-card-header">
+          <div class="dash-card-title">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: var(--accent-purple);">
+              <path d="M3 6V4.5C3 3.7 3.7 3 4.5 3H6C6.5 3 7 3.2 7.3 3.6L20 18C20.6 18.7 20.5 19.7 19.9 20.3L18.3 21.9C17.7 22.5 16.7 22.5 16 21.9L3.4 7.3C3.1 7 3 6.5 3 6Z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/>
+              <circle cx="6.5" cy="6.5" r="1.3" fill="currentColor"/>
+            </svg>
+            <span>Category Breakdown</span>
+          </div>
+        </div>
+        <div class="chart-wrapper" style="height: 220px;">
+          <canvas id="chart-category-dist"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     2. ALL TASKS VIEW
+     ========================================================= -->
+<div class="view-container" id="view-tasks">
+  <div class="view-header">
+    <div class="view-header-title">
+      <h1>Task Management</h1>
+      <p>Organize, schedule, prioritize, and check off your personal responsibilities.</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+      <button class="btn-secondary" id="btn-batch-mode" title="Select multiple tasks">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3.5" y="4" width="17" height="16" rx="2.5" stroke="currentColor" stroke-width="1.9"/>
+          <path d="M7.5 9.5L9.5 11.5L13 8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M7.5 15L9.5 17L13 13.5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg> Batch Mode
+      </button>
+      <button class="btn-primary" id="tasks-btn-new-task">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        </svg> Add New Task
+      </button>
+    </div>
+  </div>
+
+  <!-- Quick Add Bar -->
+  <div class="quick-add-bar">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: var(--primary-400); margin-left: 0.5rem;">
+      <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+    <input type="text" id="quick-add-input" class="quick-add-input" placeholder="Type a task and press Enter to quickly add...">
+    <button class="btn-primary" id="btn-quick-add" style="padding: 0.45rem 1rem; font-size: 0.85rem;">Add</button>
+  </div>
+
+  <!-- Category Filter Chips Bar -->
+  <div class="category-chips-bar" id="tasks-category-chips">
+    <div class="category-chip active" data-cat-id="">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="3" width="7.5" height="7.5" rx="1.5" stroke="currentColor" stroke-width="1.9"/>
+        <rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5" stroke="currentColor" stroke-width="1.9"/>
+        <rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5" stroke="currentColor" stroke-width="1.9"/>
+        <rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5" stroke="currentColor" stroke-width="1.9"/>
+      </svg> All Categories
+    </div>
+  </div>
+
+  <!-- Task Filters & Search Toolbar -->
+  <div class="task-toolbar">
+    <div class="filter-group" id="tasks-status-filters">
+      <button class="filter-pill active" data-due-filter="all">All</button>
+      <button class="filter-pill" data-due-filter="pending">Pending</button>
+      <button class="filter-pill" data-due-filter="completed">Completed</button>
+      <button class="filter-pill" data-due-filter="today">Today</button>
+      <button class="filter-pill" data-due-filter="upcoming">Upcoming</button>
+      <button class="filter-pill" data-due-filter="overdue">Overdue</button>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;">
+      <select class="select-filter" id="filter-select-priority">
+        <option value="">All Priorities</option>
+        <option value="urgent">🔴 Urgent</option>
+        <option value="high">🟠 High</option>
+        <option value="medium">🔵 Medium</option>
+        <option value="low">⚪ Low</option>
+      </select>
+
+      <select class="select-filter" id="filter-select-sort">
+        <option value="due_date-asc">Due Date (Earliest)</option>
+        <option value="due_date-desc">Due Date (Latest)</option>
+        <option value="priority-desc">Priority (Highest)</option>
+        <option value="created-desc">Date Created (Newest)</option>
+        <option value="title-asc">Alphabetical (A-Z)</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Batch Actions Bar -->
+  <div id="batch-actions-bar" style="display: none; background: rgba(99, 102, 241, 0.15); border: 1px solid var(--primary-500); border-radius: var(--radius-md); padding: 0.65rem 1rem; margin-bottom: 1rem; justify-content: space-between; align-items: center;">
+    <div style="font-size: 0.88rem; font-weight: 600;">
+      <span id="batch-selected-count">0</span> task(s) selected
+    </div>
+    <div style="display: flex; gap: 0.5rem;">
+      <button class="btn-secondary" id="btn-batch-complete" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 12L10 17L19 8" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg> Mark Completed
+      </button>
+      <button class="btn-secondary" id="btn-batch-incomplete" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.9"/>
+          <path d="M12 7V12L15.5 14" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+        </svg> Mark Pending
+      </button>
+      <button class="btn-secondary" id="btn-batch-delete" style="padding: 0.35rem 0.75rem; font-size: 0.8rem; color: var(--priority-urgent);">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 7H20M6 7V19C6 20 7 21 8 21H16C17 21 18 20 18 19V7M9 7V4C9 3.4 9.4 3 10 3H14C14.6 3 15 3.4 15 4V7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg> Delete
+      </button>
+      <button class="btn-secondary" id="btn-batch-cancel" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">Cancel</button>
+    </div>
+  </div>
+
+  <div class="tasks-list" id="tasks-main-list">
+    <!-- Populated by tasks.js -->
+  </div>
+</div>
+
+<!-- =========================================================
+     3. WORKFLOW VIEW
+     ========================================================= -->
+<div class="view-container" id="view-workflow">
+  <div class="view-header">
+    <div class="view-header-title">
+      <h1>Task Workflow</h1>
+      <p>Track task execution across sequential stages: To Do → In Progress → Completed.</p>
+    </div>
+    <div>
+      <button class="btn-primary" id="workflow-btn-new-task">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        </svg> Add Task
+      </button>
+    </div>
+  </div>
+
+  <div class="workflow-pipeline">
+    <div class="workflow-step todo">
+      <div class="workflow-step-icon">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 3H18L16 9H8L6 3Z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/>
+          <path d="M8 9V17C8 19 10 21 12 21C14 21 16 19 16 17V9" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/>
+          <path d="M10 14H14" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="workflow-step-info">
+        <h4>1. To Do</h4>
+        <span id="workflow-count-todo">0 tasks</span>
+      </div>
+    </div>
+
+    <div class="workflow-connector">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <div class="workflow-step inprogress">
+      <div class="workflow-step-icon">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.9" stroke-dasharray="4 3"/>
+          <circle cx="12" cy="12" r="3" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="workflow-step-info">
+        <h4>2. In Progress</h4>
+        <span id="workflow-count-inprogress">0 tasks</span>
+      </div>
+    </div>
+
+    <div class="workflow-connector">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <div class="workflow-step completed">
+      <div class="workflow-step-icon">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="9.5" stroke="currentColor" stroke-width="1.9"/>
+          <path d="M7.5 12.5L10.5 15.5L16.5 9" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="workflow-step-info">
+        <h4>3. Completed</h4>
+        <span id="workflow-count-completed">0 tasks</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="workflow-sections">
+    <div class="workflow-stage-card">
+      <div class="workflow-stage-header">
+        <div class="workflow-stage-title">
+          <span style="width: 12px; height: 12px; border-radius: var(--radius-full); background: var(--accent-amber);"></span>
+          <span>Stage 1: To Do</span>
+        </div>
+        <span class="workflow-stage-badge" id="workflow-badge-todo">0 Tasks</span>
+      </div>
+      <div class="workflow-tasks-grid" id="workflow-list-todo">
+      </div>
+    </div>
+
+    <div class="workflow-stage-card">
+      <div class="workflow-stage-header">
+        <div class="workflow-stage-title">
+          <span style="width: 12px; height: 12px; border-radius: var(--radius-full); background: var(--accent-cyan);"></span>
+          <span>Stage 2: In Progress</span>
+        </div>
+        <span class="workflow-stage-badge" id="workflow-badge-inprogress">0 Tasks</span>
+      </div>
+      <div class="workflow-tasks-grid" id="workflow-list-inprogress">
+      </div>
+    </div>
+
+    <div class="workflow-stage-card">
+      <div class="workflow-stage-header">
+        <div class="workflow-stage-title">
+          <span style="width: 12px; height: 12px; border-radius: var(--radius-full); background: var(--accent-emerald);"></span>
+          <span>Stage 3: Completed</span>
+        </div>
+        <span class="workflow-stage-badge" id="workflow-badge-completed">0 Tasks</span>
+      </div>
+      <div class="workflow-tasks-grid" id="workflow-list-completed">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     4. CALENDAR VIEW
+     ========================================================= -->
+<div class="view-container" id="view-calendar">
+  <div class="view-header">
+    <div class="view-header-title">
+      <h1>Calendar Timeline</h1>
+      <p>View your scheduled tasks and deadlines by day, week, and month.</p>
+    </div>
+    <div>
+      <button class="btn-primary" id="cal-btn-new-task">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        </svg> Schedule Task
+      </button>
+    </div>
+  </div>
+
+  <div class="calendar-wrapper">
+    <div class="calendar-header">
+      <div class="calendar-nav">
+        <button class="btn-secondary" id="cal-btn-prev">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 6L9 12L15 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="btn-secondary" id="cal-btn-today">Today</button>
+        <button class="btn-secondary" id="cal-btn-next">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="calendar-month-title" id="cal-month-title">September 2026</div>
+      <div></div>
+    </div>
+
+    <div class="calendar-grid" id="calendar-grid">
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     5. CATEGORIES MANAGER VIEW
+     ========================================================= -->
+<div class="view-container" id="view-categories">
+  <div class="view-header">
+    <div class="view-header-title">
+      <h1>Category Management</h1>
+      <p>Edit, customize, or remove suggested categories, or create your own custom tags.</p>
+    </div>
+    <div style="display: flex; gap: 0.65rem; flex-wrap: wrap;">
+      <button class="btn-secondary" id="categories-btn-restore-defaults" title="Restore suggested default categories">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 12C4 16.4 7.6 20 12 20C16.4 20 20 16.4 20 12" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+          <path d="M12 4C14.5 4 16.7 5.2 18 7M12 4V8M12 4L8 4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg> Restore Suggested
+      </button>
+      <button class="btn-secondary" id="categories-btn-remove-all" style="color: var(--priority-urgent);" title="Remove all categories (keep all tasks)">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 7H20M6 7V19C6 20 7 21 8 21H16C17 21 18 20 18 19V7M9 7V4C9 3.4 9.4 3 10 3H14C14.6 3 15 3.4 15 4V7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M10 11V17M14 11V17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg> Remove All
+      </button>
+      <button class="btn-primary" id="categories-btn-new">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        </svg> Create Category
+      </button>
+    </div>
+  </div>
+
+  <div class="categories-grid" id="categories-main-grid">
+  </div>
+</div>
+
+<!-- =========================================================
+     6. ANALYTICS & REPORTS VIEW
+     ========================================================= -->
+<div class="view-container" id="view-analytics">
+  <div class="view-header">
+    <div class="view-header-title">
+      <h1>Analytics & Insights</h1>
+      <p>Deep productivity breakdown, completion trends, and task distribution.</p>
+    </div>
+  </div>
+
+  <div class="charts-row" style="margin-bottom: 1.75rem;">
+    <div class="dash-card">
+      <div class="dash-card-header">
+        <div class="dash-card-title">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: var(--primary-400);">
+            <path d="M3 20H21" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+            <path d="M4 16L9 11L13 15L20 8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="4" cy="16" r="1.3" fill="currentColor"/>
+            <circle cx="9" cy="11" r="1.3" fill="currentColor"/>
+            <circle cx="13" cy="15" r="1.3" fill="currentColor"/>
+            <circle cx="20" cy="8" r="1.3" fill="currentColor"/>
+          </svg>
+          Productivity Velocity
+        </div>
+      </div>
+      <div class="chart-wrapper">
+        <canvas id="chart-analytics-velocity"></canvas>
+      </div>
+    </div>
+
+    <div class="dash-card">
+      <div class="dash-card-header">
+        <div class="dash-card-title">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: var(--accent-purple);">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.9"/>
+            <path d="M12 3V12L19 8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Category Completion Rates
+        </div>
+      </div>
+      <div class="chart-wrapper">
+        <canvas id="chart-analytics-categories"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="dash-card">
+    <div class="dash-card-header">
+      <div class="dash-card-title">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: var(--primary-400);">
+          <rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.9"/>
+          <path d="M3 9H21M9 4V20" stroke="currentColor" stroke-width="1.9"/>
+        </svg>
+        Category Performance Matrix
+      </div>
+    </div>
+    <div style="overflow-x: auto;">
+      <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;" id="analytics-table">
+        <thead>
+          <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-muted);">
+            <th style="padding: 0.75rem 1rem;">Category</th>
+            <th style="padding: 0.75rem 1rem;">Total Tasks</th>
+            <th style="padding: 0.75rem 1rem;">Active</th>
+            <th style="padding: 0.75rem 1rem;">Completed</th>
+            <th style="padding: 0.75rem 1rem;">Progress</th>
+          </tr>
+        </thead>
+        <tbody id="analytics-table-body">
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
